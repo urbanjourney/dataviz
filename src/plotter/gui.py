@@ -5,7 +5,7 @@ import numpy as np
 import PyQt5
 import pyqtgraph as pg
 
-
+from plotwindow import PlotWindow as pw
 
 
 import pyqtgraph.multiprocess as mp
@@ -44,36 +44,6 @@ class App():
         self.w.setWindowTitle("Urban Journey 2")
 
 
-
-        proc = mp.QtProcess()
-        rpg = proc._import('pyqtgraph')
-
-        plotwin = rpg.plot(title="test")
-        plotwin2 = rpg.plot(tiltle="test2")
-        self.curve1 = plotwin.plot(pen='y')
-        self.curve1.setPen('b')
-        self.curve2 = plotwin.plot(pen='y')
-        self.curve2.setPen('g')
-        self.curve3 = plotwin.plot(pen='y')
-        self.curve2.setPen('r')
-
-        self.curve4 = plotwin2.plot(pen='y')
-        self.curve4.setPen('b')
-        self.curve5 = plotwin2.plot(pen='y')
-        self.curve5.setPen('g')
-        self.curve6 = plotwin2.plot(pen='y')
-        self.curve6.setPen('r')
-
-
-
-
-
-
-
-
-
-
-
     def Start(self):
         self.w.show()
         self.app.exec_()
@@ -81,11 +51,5 @@ class App():
 
     def Update(self, data):
 
-        self.curve1.setData(y=data, _callSync='async')
-        self.curve2.setData(y=data*1.1+0.6, _callSync='async')
-        self.curve3.setData(y=data+0.2, _callSync='async')
-
-        self.curve4.setData(y=data*-1, _callSync='async')
-        self.curve5.setData(y=data * -1.1 + 0.6, _callSync='async')
-        self.curve6.setData(y=data *-1 + 0.2, _callSync='async')
+        1+1
 

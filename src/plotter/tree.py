@@ -1,5 +1,6 @@
-import sys
 from PyQt5 import QtCore, QtGui
+import plotwindow
+
 
 
 class Window(QtGui.QWidget):
@@ -8,59 +9,103 @@ class Window(QtGui.QWidget):
         QtGui.QWidget.__init__(self)
         self.treeWidget = QtGui.QTreeWidget()
         self.treeWidget.setHeaderHidden(True)
-        self.addItems(self.treeWidget.invisibleRootItem())
-        self.treeWidget.itemChanged.connect (self.handleChanged)
+
+
         layout = QtGui.QVBoxLayout()
         layout.addWidget(self.treeWidget)
         self.setLayout(layout)
 
-    def addItems(self, parent):
-        column = 0
-        sensors = self.addParent(parent, column, 'Window sensors', 'data')
-        accel = self.addParent(sensors, column, 'Graph accelerometer', 'data')
-        gyr = self.addParent(sensors, column, 'Graph gyroscope', 'data')
-        mag = self.addParent(sensors, column, 'Graph magnetometer', 'data')
+        self.column = 0
 
-        self.addChild(accel, column, 'Curve X', 'data Type A')
-        self.addChild(accel, column, 'Curve Y', 'data Type B')
-        self.addChild(accel, column, 'Curve Z', 'data Type B')
+        self.sensors = self.addWindow(self.treeWidget.invisibleRootItem(), self.column, 'Window sensors', [0,0,0,0])
+        self.states = self.addWindow(self.treeWidget.invisibleRootItem(), self.column, 'Sensors', [0,1,0,0])
 
-        self.addChild(gyr, column, 'Curve ', 'data Type A')
-        self.addChild(gyr, column, 'Curve Y', 'data Type B')
-        self.addChild(gyr, column, 'Curve Z', 'data Type B')
+        accel = self.addGraph(self.sensors, self.column, 'Graph accelerometer', [1,0,0,0])
+        gyr = self.addGraph(self.sensors, self.column, 'Graph gyroscope', [1,1,0,0])
+        mag = self.addGraph(self.sensors, self.column, 'Graph magnetometer', [1,2,0,0])
 
-        self.addChild(mag, column, 'Curve X', 'data Type A')
-        self.addChild(mag, column, 'Curve Y', 'data Type B')
-        self.addChild(mag, column, 'Curve Z', 'data Type B')
-        self.addChild(mag, column, 'Curve N', 'data Type A')
+        self.addPlot(accel, self.column, 'Curve X', [2,0,0,0])
+        self.addPlot(accel, self.column, 'Curve Y', [2,1,0,0])
+        self.addPlot(accel, self.column, 'Curve Z', [2,2,0,0])
 
-        states = self.addParent(parent, column, 'Sensors', 'data')
+        self.addPlot(gyr, self.column, 'Curve X', [2,0,0,1])
+        self.addPlot(gyr, self.column, 'Curve Y', 'data Type B')
+        self.addPlot(gyr, self.column, 'Curve Z', 'data Type B')
 
-        pins = self.addParent(states, column, 'Graph pin states', 'data')
-        self.addChild(pins, column, 'RBF', 'data')
-        self.addChild(pins, column, 'BW', 'data')
+        self.addPlot(mag, self.column, 'Curve X', 'data Type A')
+        self.addPlot(mag, self.column, 'Curve Y', 'data Type B')
+        self.addPlot(mag, self.column, 'Curve Z', 'data Type B')
+        self.addPlot(mag, self.column, 'Curve N', 'data Type A')
 
-        logger = self.addParent(states, column, 'Graph Logger', 'data')
-        self.addChild(logger, column, 'Curve write speed', 'data ')
+        pins = self.addGraph(self.states, self.column, 'Graph pin states', [1,0,1,0])
+        self.addPlot(pins, self.column, 'RBF', 'data')
+        self.addPlot(pins, self.column, 'BW', 'data')
+
+        logger = self.addGraph(self.states, self.column, 'Graph Logger', [1,1,1,0])
+        self.addPlot(logger, self.column, 'Curve write speed', 'data ')
+
+        self.treeWidget.itemChanged.connect(self.handleChanged)
 
 
 
 
-    def addParent(self, parent, column, title, data):
+    def addWindow(self, parent, column, title, data):
+        item = QtGui.QTreeWidgetItem(parent, [title])
+
+        item.setChildIndicatorPolicy(QtGui.QTreeWidgetItem.ShowIndicator)
+        item.setExpanded (True)
+        item.setCheckState(column, QtCore.Qt.Unchecked)
+        item.setData(column, QtCore.Qt.UserRole, data)
+
+        return item
+
+    def openWindow(self, index):
+        self.__dict__['newwindow'+str(index)] = plotwindow.PlotWindow()
+        self.__dict__['newwindow'+str(index)].Show()
+
+
+
+    def closeWindow(self, index):
+        self.__dict__['newwindow'+str(index)].Hide()
+
+    def addGraph(self, parent, column, title, data):
         item = QtGui.QTreeWidgetItem(parent, [title])
         item.setData(column, QtCore.Qt.UserRole, data)
-        item.setChildIndicatorPolicy(QtGui.QTreeWidgetItem.ShowIndicator)
+        item.setChildIndicatorPolicy(QtGui.QTreeWidgetItem.DontShowIndicatorWhenChildless)
+        item.setCheckState(column, QtCore.Qt.Unchecked)
         item.setExpanded (True)
         return item
 
-    def addChild(self, parent, column, title, data):
+    def removeGraph(self):
+        1 + 1
+
+    def addPlot(self, parent, column, title, data):
         item = QtGui.QTreeWidgetItem(parent, [title])
         item.setData(column, QtCore.Qt.UserRole, data)
+        item.setChildIndicatorPolicy(QtGui.QTreeWidgetItem.DontShowIndicator)
         item.setCheckState (column, QtCore.Qt.Unchecked)
         return item
+    def removePlot(self):
+        1 + 1
 
     def handleChanged(self, item, column):
         if item.checkState(column) == QtCore.Qt.Checked:
+            if item.data(self.column,QtCore.Qt.UserRole)[0] == 0:
+                self.openWindow(item.data(self.column, QtCore.Qt.UserRole)[1])
+
+            if item.data(self.column, QtCore.Qt.UserRole)[0] == 1:
+                self.__dict__['newwindow'+str(item.data(self.column, QtCore.Qt.UserRole)[2])].addGraph(item.data(self.column,QtCore.Qt.UserRole)[1])
+
+            if item.data(self.column, QtCore.Qt.UserRole)[0] == 2:
+                self.__dict__['newwindow' + str(item.data(self.column, QtCore.Qt.UserRole)[2])].addCurve(item.data(self.column, QtCore.Qt.UserRole)[3],item.data(self.column, QtCore.Qt.UserRole)[1])
+
+
             print ("checked", item, item.text(column))
         if item.checkState(column) == QtCore.Qt.Unchecked:
+            if item.data(self.column,QtCore.Qt.UserRole)[0] == 0:
+                self.closeWindow(item.data(self.column, QtCore.Qt.UserRole)[1])
+
+            if item.data(self.column, QtCore.Qt.UserRole)[0] == 1:
+                self.__dict__['newwindow'+str(item.data(self.column, QtCore.Qt.UserRole)[2])].closeGraph(item.data(self.column,QtCore.Qt.UserRole)[1])
+
             print ("unchecked", item, item.text(column))

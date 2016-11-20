@@ -4,11 +4,33 @@
         # We will need these to modulate our signal.
         from math import pi, sin
         from time import time
+        from random import random
     </script>
 
     <!-- Since 'a' is an eval attribute we will pass some python code there to modulate
     the signal -->
     <sg out="foo" f="0.2" a="3*sin(2*pi*0.9*time())"/>
 
-    <scope inp="foo"/>
+
+    <gui inp="foo">
+
+        <3dplotwindow inp="position"/>
+
+
+        <graphwindow title="sensors" checked=true>
+            <graph tittle="accel" checked=true>
+                <curve inp="foo"/>
+                <curve inp="foo"/>
+                <curve inp="foo"/>
+            </graph>
+            <graph tittle="gyro">
+            </graph>
+            <graph tittle="mag">
+            </graph>
+        </graphwindow>
+        <graphwindow title="states" checked=false>
+
+        </graphwindow>
+
+    </scope>
 </ujml>
