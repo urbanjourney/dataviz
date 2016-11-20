@@ -1,0 +1,7 @@
+name: scope
+version: 0.0.0
+author: Someone
+dependencies:
+plugins:
+  signal_generator:
+    - [symlink, "../signal_generator"]
