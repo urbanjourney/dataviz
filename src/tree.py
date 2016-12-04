@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtGui
-import plotwindow
 
+from .plotwindow import PlotWindow
 
 
 class Window(QtGui.QWidget):
@@ -60,7 +60,7 @@ class Window(QtGui.QWidget):
         return item
 
     def openWindow(self, index):
-        self.__dict__['newwindow'+str(index)] = plotwindow.PlotWindow()
+        self.__dict__['newwindow'+str(index)] = PlotWindow()
         self.__dict__['newwindow'+str(index)].Show()
 
 

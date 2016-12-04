@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ujml version="0.0.1">
+<ujml version="0.0.1" pyqt="True" pyqt_quit_on_last_window_closed="False" stop_on_exception="False" stop_on_assertion_error="False">
     <script>
         # We will need these to modulate our signal.
         from math import pi, sin
@@ -12,25 +12,11 @@
     <sg out="foo" f="0.2" a="3*sin(2*pi*0.9*time())"/>
 
 
-    <gui inp="foo">
-
-        <3dplotwindow inp="position"/>
-
-
-        <graphwindow title="sensors" checked=true>
-            <graph tittle="accel" checked=true>
-                <curve inp="foo"/>
-                <curve inp="foo"/>
-                <curve inp="foo"/>
-            </graph>
-            <graph tittle="gyro">
-            </graph>
-            <graph tittle="mag">
+    <graphtree inp="foo">
+        <graphwindow>
+            <graph>
+                <curve/>
             </graph>
         </graphwindow>
-        <graphwindow title="states" checked=false>
-
-        </graphwindow>
-
-    </scope>
+    </graphtree>
 </ujml>

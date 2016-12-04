@@ -1,5 +1,5 @@
 
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtGui, QtCore, QtWidgets
 import pyqtgraph as pg
 import pyqtgraph.widgets.RemoteGraphicsView
 import numpy as np
