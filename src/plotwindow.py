@@ -33,6 +33,13 @@ class PlotWindow():
         self.__dict__['g'+str(parentGraph)+'c'+str(index)] = self.__dict__['PlotItem' + str(parentGraph)].plot()
         self.__dict__['g' + str(parentGraph) + 'c' + str(index)].setData([random(), random()])
 
+    def updateCurve(self, parentGraph, index, data, xaxis=None):
+        if(xaxis is None):
+            self.__dict__['g' + str(parentGraph) + 'c' + str(index)].setData(data)
+        else:
+            self.__dict__['g' + str(parentGraph) + 'c' + str(index)].setData(data, xaxis)
+
+
     def test(self):
         return 1
 

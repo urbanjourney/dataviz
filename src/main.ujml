@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ujml version="0.0.1" pyqt="True" pyqt_quit_on_last_window_closed="False" stop_on_exception="False" stop_on_assertion_error="False">
+<ujml version="0.0.1" pyqt="True" pyqt_quit_on_last_window_closed="True" stop_on_exception="True" stop_on_assertion_error="True">
     <script>
         # We will need these to modulate our signal.
         from math import pi, sin
@@ -12,10 +12,10 @@
     <sg out="foo" f="0.2" a="3*sin(2*pi*0.9*time())"/>
 
 
-    <graphtree inp="foo">
-        <graphwindow>
-            <graph>
-                <curve/>
+    <graphtree>
+        <graphwindow name="First Window">
+            <graph name="First Graph in first window">
+                <curve name="Firgfghnmh" yaxis="foo"/>
             </graph>
         </graphwindow>
     </graphtree>

@@ -6,4 +6,5 @@ def main(args):
     """Entry point """
     ujml_path = join(dirname(__file__), "main.ujml")
     ujml = from_file(ujml_path)
+    ujml.start()
 
